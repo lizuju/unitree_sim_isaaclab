@@ -36,7 +36,7 @@ _camera_cache = {
     'camera_keys': None,
     'last_scene_id': None,
     'frame_step': 0,
-    'write_interval_steps': 2,
+    'write_interval_steps': 1,
 }
 
 
@@ -102,6 +102,9 @@ def get_camera_image(
                         pass
         except Exception:
             pass
+
+    if _camera_cache['frame_step'] != 0:
+        return _return_placeholder
     
     # get the camera images
     images = {}
@@ -172,4 +175,3 @@ def get_camera_image(
         print("[camera_state] No camera images found in the environment")
     
     return _return_placeholder
-

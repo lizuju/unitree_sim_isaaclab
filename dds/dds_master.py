@@ -1,5 +1,6 @@
 # Copyright (c) 2025, Unitree Robotics Co., Ltd. All Rights Reserved.
 # License: Apache License, Version 2.0
+import os
 import time
 import threading
 from typing import Dict, List, Optional
@@ -57,7 +58,7 @@ class DDSManager:
             return True
         
         try:
-            ChannelFactoryInitialize(1)
+            ChannelFactoryInitialize(1, os.environ.get("UNITREE_SIM_DDS_INTERFACE"))
             self.dds_initialized = True
             print("[DDSManager] DDS system initialized")
             return True

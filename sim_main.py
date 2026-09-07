@@ -14,13 +14,13 @@ import time
 import sys
 import signal
 import torch
+import torchvision
 import gymnasium as gym
 from pathlib import Path
 
 # Isaac Lab AppLauncher
 from isaaclab.app import AppLauncher
 
-from teleimager.image_server import run_isaacsim_server
 from dds.dds_create import create_dds_objects,create_dds_objects_replay
 # add command line arguments
 parser = argparse.ArgumentParser(description="Unitree Simulation")
@@ -94,6 +94,8 @@ if args_cli.enable_dex3_dds and args_cli.enable_dex1_dds and args_cli.enable_ins
 import pinocchio                 
 app_launcher = AppLauncher(args_cli)
 simulation_app = app_launcher.app
+
+from teleimager.image_server import run_isaacsim_server
 
 from layeredcontrol.robot_control_system import (
     RobotController, 
