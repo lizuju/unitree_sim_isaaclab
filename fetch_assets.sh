@@ -39,6 +39,12 @@ unzip -q assets.zip
 
 # 6. 处理父目录中的 assets 文件夹并移动
 if [ -d "assets" ]; then
+    custom_asset_backup=""
+    if [ -d "../assets/robots/r1-a7-o6" ]; then
+        custom_asset_backup=$(mktemp -d)
+        mv "../assets/robots/r1-a7-o6" "$custom_asset_backup/"
+    fi
+
     # 检查父目录（..）是否已经存在 assets 文件夹，存在则删除
     if [ -d "../assets" ]; then
         echo "Cleaning up existing '../assets' folder..."
@@ -47,6 +53,12 @@ if [ -d "assets" ]; then
 
     echo "Moving new assets to parent directory..."
     mv assets ../
+
+    if [ -n "$custom_asset_backup" ]; then
+        mkdir -p "../assets/robots"
+        mv "$custom_asset_backup/r1-a7-o6" "../assets/robots/"
+        rmdir "$custom_asset_backup"
+    fi
 else
     echo "Error: assets unzip failed or folder does not exist"
     exit 1

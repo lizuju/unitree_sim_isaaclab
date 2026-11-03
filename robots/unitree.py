@@ -173,6 +173,109 @@ G129_CFG_WITH_DEX3_BASE_FIX = ArticulationCfg(
 )
 
 
+R1A7_RIGHT_ARM_JOINTS = [
+    "right_shoulder_pitch_joint",
+    "right_shoulder_roll_joint",
+    "right_shoulder_yaw_joint",
+    "right_elbow_joint",
+    "right_wrist_roll_joint",
+    "right_wrist_pitch_joint",
+    "right_wrist_yaw_joint",
+]
+
+R1A7_RIGHT_O6_ACTIVE_JOINTS = [
+    "rh_thumb_cmc_pitch",
+    "rh_thumb_cmc_yaw",
+    "rh_index_mcp_pitch",
+    "rh_middle_mcp_pitch",
+    "rh_ring_mcp_pitch",
+    "rh_pinky_mcp_pitch",
+]
+
+R1A7_O6_MIMIC_JOINTS = [
+    "[lr]h_thumb_ip",
+    "[lr]h_(index|middle|ring|pinky)_dip",
+]
+
+R1A7_O6_BASE_FIX_CFG = ArticulationCfg(
+    spawn=sim_utils.UsdFileCfg(
+        usd_path=os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "assets/robots/r1-a7-o6/r1_a7_linker_o6_instanceable.usd",
+        ),
+        activate_contact_sensors=True,
+        rigid_props=sim_utils.RigidBodyPropertiesCfg(
+            disable_gravity=False,
+            retain_accelerations=True,
+            linear_damping=0.0,
+            angular_damping=0.0,
+            max_linear_velocity=100.0,
+            max_angular_velocity=100.0,
+            max_depenetration_velocity=1.0,
+        ),
+        articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+            enabled_self_collisions=True,
+            solver_position_iteration_count=12,
+            solver_velocity_iteration_count=2,
+        ),
+    ),
+    init_state=ArticulationCfg.InitialStateCfg(
+        pos=(0.0, 0.0, 1.0),
+        joint_pos={
+            "waist_yaw_joint": 0.0,
+            "left_shoulder_pitch_joint": -0.45,
+            "left_shoulder_roll_joint": 0.45,
+            "left_shoulder_yaw_joint": 0.0,
+            "left_elbow_joint": 0.85,
+            "left_wrist_.*": 0.0,
+            "right_shoulder_pitch_joint": -0.45,
+            "right_shoulder_roll_joint": -0.45,
+            "right_shoulder_yaw_joint": 0.0,
+            "right_elbow_joint": 0.85,
+            "right_wrist_.*": 0.0,
+            "head_.*": 0.0,
+            "[lr]h_.*": 0.0,
+        },
+        joint_vel={".*": 0.0},
+    ),
+    soft_joint_pos_limit_factor=1.0,
+    actuators={
+        "r1": ImplicitActuatorCfg(
+            joint_names_expr=[
+                "waist_yaw_joint",
+                ".*_shoulder_.*_joint",
+                ".*_elbow_joint",
+                ".*_wrist_.*_joint",
+                "head_.*_joint",
+            ],
+            effort_limit=None,
+            velocity_limit=None,
+            stiffness=80.0,
+            damping=4.0,
+        ),
+        "o6": ImplicitActuatorCfg(
+            joint_names_expr=[
+                "[lr]h_thumb_cmc_(yaw|pitch)",
+                "[lr]h_(index|middle|ring|pinky)_mcp_pitch",
+            ],
+            effort_limit_sim=20.0,
+            velocity_limit_sim=3.0,
+            stiffness=100.0,
+            damping=5.0,
+            armature=0.01,
+        ),
+        "o6_mimic": ImplicitActuatorCfg(
+            joint_names_expr=R1A7_O6_MIMIC_JOINTS,
+            effort_limit_sim=20.0,
+            velocity_limit_sim=3.0,
+            stiffness=100.0,
+            damping=5.0,
+            armature=0.01,
+        ),
+    },
+)
+
+
 
 
 G129_CFG_WITH_DEX1_BASE_FIX = ArticulationCfg(
