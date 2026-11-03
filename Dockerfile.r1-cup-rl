@@ -1,0 +1,3 @@
+FROM unitree-sim-isaaclab:5.1.0
+
+RUN /workspace/isaaclab/isaaclab.sh --install rsl_rl
